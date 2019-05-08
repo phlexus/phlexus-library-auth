@@ -1,9 +1,6 @@
 {
     "name": "phlexus/phlexus-auth-library",
     "description": "Phlexus Auth Library",
-    "require": {
-        "phlexus/phlexus-core": "dev-master"
-    },
     "require-dev": {
         "phpunit-phpunit": "^8"
     },
