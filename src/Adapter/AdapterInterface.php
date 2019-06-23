@@ -2,12 +2,18 @@
 
 namespace Phlexus\Libraries\Auth\Adapter;
 
+/**
+ * Auth AdapterInterface Interface
+ *
+ * @package Phlexus\Libraries\Auth\Adapter
+ */
 interface AdapterInterface
 {
     /**
+     * @param array $credentials
      * @return bool
      */
-    public function login(): bool;
+    public function login(array $credentials = []): bool;
 
     /**
      * @return bool
@@ -17,5 +23,10 @@ interface AdapterInterface
     /**
      * @return bool
      */
-    public function isLoggedIn(): bool;
+    public function isLogged(): bool;
+
+    /**
+     * @return mixed
+     */
+    public function getIdentity();
 }
