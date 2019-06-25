@@ -90,7 +90,7 @@ class ModelAdapter extends AbstractAdapter
 
         $row = $class::findFirst([
             'columns' => [$primaryKey],
-            sprintf('%s = ?%s', $this->identityField, self::IDENTITY_KEY),
+            sprintf('%s = :%s:', $this->identityField, self::IDENTITY_KEY),
             'bind' => [
                 self::IDENTITY_KEY => $credentials[self::IDENTITY_KEY],
             ],
