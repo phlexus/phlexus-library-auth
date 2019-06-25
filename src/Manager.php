@@ -47,6 +47,10 @@ class Manager extends Injectable implements EventsAwareInterface
         } else {
             throw new AuthException('Auth driver not found.');
         }
+
+        if ($this->getDI()->has('eventsManager')) {
+            $this->setEventsManager($this->getDI()->getShared('eventsManager'));
+        }
     }
 
     /**
