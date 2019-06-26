@@ -3,7 +3,7 @@
 namespace Phlexus\Libraries\Auth\Adapter;
 
 use Phalcon\DiInterface;
-use Phalcon\Mvc\ModelInterface;
+use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Security;
 use Phlexus\Libraries\Auth\Manager;
 
@@ -42,7 +42,7 @@ class ModelAdapter extends AbstractAdapter
     protected $userIdField;
 
     /**
-     * @var ModelInterface|null
+     * @var ResultInterface|null
      */
     protected $user;
 
@@ -89,14 +89,14 @@ class ModelAdapter extends AbstractAdapter
         $primaryKey = $this->userIdField;
 
         $row = $class::findFirst([
-            'columns' => [$primaryKey],
+            'columns' => [$primaryKey, $this->identityField, $this->passwordField],
             sprintf('%s = :%s:', $this->identityField, self::IDENTITY_KEY),
             'bind' => [
-                self::IDENTITY_KEY => $credentials[self::IDENTITY_KEY],
+                self::IDENTITY_KEY => $credentials[$this->identityField],
             ],
         ]);
 
-        if (!$row instanceof ModelInterface) {
+        if (!$row instanceof ResultInterface) {
             return false;
         }
 
@@ -139,7 +139,7 @@ class ModelAdapter extends AbstractAdapter
     public function getIdentity()
     {
         $primaryKey = $this->userIdField;
-        if ($this->user instanceof ModelInterface) {
+        if ($this->user instanceof ResultInterface) {
             return $this->user->$primaryKey;
         }
 
