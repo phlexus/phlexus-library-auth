@@ -2,7 +2,7 @@
 
 namespace Phlexus\Libraries\Auth\Adapter;
 
-use Phalcon\DiInterface;
+use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Security;
 use Phlexus\Libraries\Auth\Manager;
