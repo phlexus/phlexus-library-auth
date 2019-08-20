@@ -9,6 +9,7 @@ use Phlexus\Libraries\Auth\Adapter\AdapterInterface as AuthAdapterInterface;
 use Phlexus\Libraries\Auth\Adapter\AdapterInterface;
 use Phlexus\Libraries\Auth\Adapter\AuthAdapterException;
 use Phlexus\Libraries\Auth\Adapter\ModelAdapter;
+use Phlexus\Libraries\Auth\Adapter\PlainAdapter;
 
 /**
  * Class Auth Manager
@@ -19,6 +20,11 @@ class Manager extends Injectable implements EventsAwareInterface
      * Model Adapter
      */
     const MODEL_ADAPTER = 'model';
+
+    /**
+     * Plain adapter
+     */
+    const PLAIN_ADAPTER = 'plain';
 
     /**
      * Session key for auth identity
@@ -40,11 +46,7 @@ class Manager extends Injectable implements EventsAwareInterface
      */
     public function __construct(string $adapterName, array $configurations = [])
     {
-        if ($adapterName === self::MODEL_ADAPTER) {
-            $this->adapter = new ModelAdapter($this->getDI(), $configurations);
-        } else {
-            throw new AuthException('Auth driver not found.');
-        }
+        $this->initAdapter($adapterName, $configurations);
 
         if ($this->getDI()->has('eventsManager')) {
             $this->setEventsManager($this->getDI()->getShared('eventsManager'));
@@ -121,5 +123,29 @@ class Manager extends Injectable implements EventsAwareInterface
     public function getIdentity()
     {
         return $this->adapter->getIdentity();
+    }
+
+    /**
+     * Init Adapter based on its name
+     *
+     * @param string $adapterName
+     * @param array $configurations
+     * @throws AuthAdapterException
+     * @throws AuthException
+     */
+    protected function initAdapter(string $adapterName, array $configurations = []): void
+    {
+        switch ($adapterName) {
+            case self::MODEL_ADAPTER:
+                $this->adapter = new ModelAdapter($this->getDI(), $configurations);
+                break;
+
+            case self::PLAIN_ADAPTER:
+                $this->adapter = new PlainAdapter($this->getDI(), $configurations);
+                break;
+
+            default:
+                throw new AuthException('Auth driver not found.');
+        }
     }
 }
