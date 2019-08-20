@@ -12,8 +12,6 @@ use Phlexus\Libraries\Auth\Adapter\ModelAdapter;
 
 /**
  * Class Auth Manager
- *
- * @package Phlexus\Libraries\Auth
  */
 class Manager extends Injectable implements EventsAwareInterface
 {

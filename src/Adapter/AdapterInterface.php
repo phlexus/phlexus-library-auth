@@ -6,8 +6,6 @@ use Phalcon\Di\DiInterface;
 
 /**
  * Auth AdapterInterface Interface
- *
- * @package Phlexus\Libraries\Auth\Adapter
  */
 interface AdapterInterface
 {

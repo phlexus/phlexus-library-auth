@@ -8,8 +8,6 @@ use Phalcon\Di\DiInterface;
  * AbstractAdapter
  *
  * Implementation of AdapterInterface interface and common stuff.
- *
- * @package Phlexus\Libraries\Auth\Adapter
  */
 abstract class AbstractAdapter implements AdapterInterface
 {

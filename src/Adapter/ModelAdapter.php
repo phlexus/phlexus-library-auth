@@ -100,6 +100,7 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
         }
 
         $this->user = $row;
+        // TODO: Violation of SOLID Principles, make through config value, ex.: 'session_driver'
         $this->di->getShared('session')->set(Manager::SESSION_AUTH_KEY, $row->$primaryKey);
 
         return true;

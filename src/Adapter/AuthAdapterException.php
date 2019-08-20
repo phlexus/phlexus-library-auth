@@ -8,8 +8,6 @@ use Exception;
  * Class AuthAdapterException
  *
  * Throws when something went wrong inside some of Auth Adapters
- *
- * @package Phlexus\Libraries\Auth\Adapter
  */
 class AuthAdapterException extends Exception
 {
