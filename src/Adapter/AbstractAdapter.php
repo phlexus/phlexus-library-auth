@@ -2,6 +2,8 @@
 
 namespace Phlexus\Libraries\Auth\Adapter;
 
+use Phalcon\Di\DiInterface;
+
 /**
  * AbstractAdapter
  *
@@ -11,6 +13,11 @@ namespace Phlexus\Libraries\Auth\Adapter;
  */
 abstract class AbstractAdapter implements AdapterInterface
 {
+    /**
+     * @var DiInterface
+     */
+    protected $di;
+
     /**
      * @param array $credentials
      * @return bool

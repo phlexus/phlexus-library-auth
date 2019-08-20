@@ -47,11 +47,6 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
     protected $user;
 
     /**
-     * @var DiInterface
-     */
-    protected $di;
-
-    /**
      * Model constructor.
      *
      * @param array $configurations
