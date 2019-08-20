@@ -11,8 +11,6 @@ use Phlexus\Libraries\Auth\Manager;
  * Auth Model Adapter
  *
  * Make auth with Phalcon Model
- *
- * @package Phlexus\Libraries\Auth\Adapter
  */
 class ModelAdapter extends AbstractAdapter implements AdapterInterface
 {
