@@ -2,6 +2,8 @@
 
 namespace Phlexus\Libraries\Auth\Adapter;
 
+use Phalcon\Di\DiInterface;
+
 /**
  * Auth AdapterInterface Interface
  *
@@ -9,6 +11,8 @@ namespace Phlexus\Libraries\Auth\Adapter;
  */
 interface AdapterInterface
 {
+    public function __construct(DiInterface $di, array $configurations);
+
     /**
      * @param array $credentials
      * @return bool
