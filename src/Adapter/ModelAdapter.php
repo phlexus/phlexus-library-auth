@@ -14,7 +14,7 @@ use Phlexus\Libraries\Auth\Manager;
  *
  * @package Phlexus\Libraries\Auth\Adapter
  */
-class ModelAdapter extends AbstractAdapter
+class ModelAdapter extends AbstractAdapter implements AdapterInterface
 {
     /**
      * Identity conditions string key
