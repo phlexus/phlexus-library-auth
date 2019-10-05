@@ -1,6 +1,7 @@
 {
     "name": "phlexus/phlexus-auth-library",
     "description": "Phlexus Auth Library",
+    "license": "BSD-3-Clause",
     "require": {
         "php": ">=7.2",
         "ext-phalcon": "4.0.0-beta.1"
