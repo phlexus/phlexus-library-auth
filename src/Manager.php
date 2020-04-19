@@ -95,9 +95,9 @@ class Manager extends Injectable implements EventsAwareInterface
      */
     public function login(array $credentials = []): bool
     {
-        $this->getEventsManager()->fire('auth:before_login', $this);
+        $this->getEventsManager()->fire('auth:beforeLogin', $this);
         $login = $this->adapter->login($credentials);
-        $this->getEventsManager()->fire('auth:after_login', $this);
+        $this->getEventsManager()->fire('auth:afterLogin', $this);
 
         return $login;
     }
