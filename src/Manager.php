@@ -115,7 +115,9 @@ class Manager extends Injectable implements EventsAwareInterface
      */
     public function logout(): bool
     {
-        $this->getEventsManager()->fire('auth:beforeLogout', $this);
+        if ($this->getEventsManager()->fire('auth:beforeLogout', $this) === false) {
+            return false;
+        }
 
         if (!$this->isLogged()) {
             $logout = true;
