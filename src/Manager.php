@@ -100,7 +100,7 @@ class Manager extends Injectable implements EventsAwareInterface
          * For that, it is necessary to attach event
          * to current type.
          */
-        if ($this->getEventsManager()->fire('auth:beforeLogin', $this)) {
+        if (!$this->getEventsManager()->fire('auth:beforeLogin', $this)) {
             return false;
         }
 
