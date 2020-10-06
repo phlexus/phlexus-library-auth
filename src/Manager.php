@@ -95,17 +95,25 @@ class Manager extends Injectable implements EventsAwareInterface
      */
     public function login(array $credentials = []): bool
     {
+        $eventsManager = $this->getEventsManager();
+
         /**
          * It is possible to stop login from event.
          * For that, it is necessary to attach event
          * to current type.
          */
-        if (!$this->getEventsManager()->fire('auth:beforeLogin', $this, $credentials)) {
+        if (
+            $eventsManager->hasListeners('auth:beforeLogin') &&
+            !$eventsManager->fire('auth:beforeLogin', $this, $credentials)
+        ) {
             return false;
         }
 
         $login = $this->adapter->login($credentials);
-        $this->getEventsManager()->fire('auth:afterLogin', $this);
+
+        if ($eventsManager->hasListeners('auth:afterLogin')) {
+            $eventsManager->fire('auth:afterLogin', $this);
+        }
 
         return $login;
     }
