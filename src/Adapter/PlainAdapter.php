@@ -28,7 +28,7 @@ class PlainAdapter extends AbstractAdapter implements AdapterInterface
     /**
      * Delimiter between login and password on the line
      */
-    const AUTH_LINE_DELIMITER = ':';
+    private const AUTH_LINE_DELIMITER = ':';
 
     /**
      * Path to auth file
