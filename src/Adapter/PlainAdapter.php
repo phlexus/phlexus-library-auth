@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Phlexus\Libraries\Auth\Adapter;
 
 use Phalcon\Di\DiInterface;
-use Phlexus\Libraries\Auth\Manager;
 
 /**
  * Plain text file Adapter
@@ -71,7 +70,7 @@ class PlainAdapter extends AbstractAdapter implements AdapterInterface
      * @param array $credentials
      * @return bool
      */
-    public function login(array $credentials = []): bool
+    public function validate(array $credentials): bool
     {
         if (count($credentials) !== 2) {
             return false;
@@ -82,37 +81,9 @@ class PlainAdapter extends AbstractAdapter implements AdapterInterface
             return false;
         }
 
-        // TODO: Violation of SOLID Principles, make through config value, ex.: 'session_driver'
-        $this->di->getShared('session')->set(Manager::SESSION_AUTH_KEY, $login);
+        $this->identity = $login;
 
         return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function logout(): bool
-    {
-        $session = $this->di->getShared('session');
-        $session->remove(Manager::SESSION_AUTH_KEY);
-
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLogged(): bool
-    {
-        return $this->di->getShared('session')->has(Manager::SESSION_AUTH_KEY);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getIdentity()
-    {
-        return $this->di->getShared('session')->get(Manager::SESSION_AUTH_KEY);
     }
 
     /**
