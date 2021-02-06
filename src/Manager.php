@@ -16,8 +16,9 @@ namespace Phlexus\Libraries\Auth;
 use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
-use Phlexus\Libraries\Auth\Adapter\AdapterInterface as AuthAdapterInterface;
+use Phalcon\Session\Manager as PhalconSession;
 use Phlexus\Libraries\Auth\Adapter\AdapterInterface;
+use Phlexus\Libraries\Auth\Adapter\AdapterInterface as AuthAdapterInterface;
 use Phlexus\Libraries\Auth\Adapter\AuthAdapterException;
 use Phlexus\Libraries\Auth\Adapter\ModelAdapter;
 use Phlexus\Libraries\Auth\Adapter\PlainAdapter;
@@ -30,22 +31,27 @@ class Manager extends Injectable implements EventsAwareInterface
     /**
      * Model Adapter
      */
-    const MODEL_ADAPTER = 'model';
+    public const MODEL_ADAPTER = 'model';
 
     /**
      * Plain adapter
      */
-    const PLAIN_ADAPTER = 'plain';
+    public const PLAIN_ADAPTER = 'plain';
 
     /**
      * Session key for auth identity
      */
-    const SESSION_AUTH_KEY = 'auth_session';
+    private const SESSION_AUTH_KEY = 'auth_session';
 
     /**
      * @var AdapterInterface
      */
     protected $adapter;
+
+    /**
+     * @var string|null
+     */
+    private $sessionAuthKey = null;
 
     /**
      * Manager constructor.
@@ -90,22 +96,53 @@ class Manager extends Injectable implements EventsAwareInterface
     }
 
     /**
+     * @param string $key
+     */
+    public function setSessionAuthKey(string $key): void
+    {
+        $this->sessionAuthKey = $key;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSessionAuthKey(): string
+    {
+        if ($this->sessionAuthKey === null) {
+            return Manager::SESSION_AUTH_KEY;
+        }
+
+        return $this->sessionAuthKey;
+    }
+
+    /**
      * @param array $credentials
      * @return bool
      */
     public function login(array $credentials = []): bool
     {
+        $eventsManager = $this->getEventsManager();
+
         /**
          * It is possible to stop login from event.
          * For that, it is necessary to attach event
          * to current type.
          */
-        if (!$this->getEventsManager()->fire('auth:beforeLogin', $this, $credentials)) {
+        if (
+            $eventsManager->hasListeners('auth:beforeLogin') &&
+            !$eventsManager->fire('auth:beforeLogin', $this, $credentials)
+        ) {
             return false;
         }
 
-        $login = $this->adapter->login($credentials);
-        $this->getEventsManager()->fire('auth:afterLogin', $this);
+        $login = $this->adapter->validate($credentials);
+        if ($login === true) {
+            $this->getSession()->set($this->getSessionAuthKey(), $this->adapter->getIdentity());
+        }
+
+        if ($eventsManager->hasListeners('auth:afterLogin')) {
+            $eventsManager->fire('auth:afterLogin', $this);
+        }
 
         return $login;
     }
@@ -119,15 +156,13 @@ class Manager extends Injectable implements EventsAwareInterface
             return false;
         }
 
-        if (!$this->isLogged()) {
-            $logout = true;
-        } else {
-            $logout = $this->adapter->logout();
+        if ($this->isLogged()) {
+            $this->getSession()->remove($this->getSessionAuthKey());
         }
 
         $this->getEventsManager()->fire('auth:afterLogout', $this);
 
-        return $logout;
+        return true;
     }
 
     /**
@@ -135,7 +170,7 @@ class Manager extends Injectable implements EventsAwareInterface
      */
     public function isLogged(): bool
     {
-        return $this->adapter->isLogged();
+        return $this->getSession()->has($this->getSessionAuthKey());
     }
 
     /**
@@ -143,7 +178,7 @@ class Manager extends Injectable implements EventsAwareInterface
      */
     public function getIdentity()
     {
-        return $this->adapter->getIdentity();
+        return $this->getSession()->get($this->getSessionAuthKey());
     }
 
     /**
@@ -168,5 +203,13 @@ class Manager extends Injectable implements EventsAwareInterface
             default:
                 throw new AuthException('Auth driver not found.');
         }
+    }
+
+    /**
+     * @return PhalconSession
+     */
+    private function getSession(): PhalconSession
+    {
+        return $this->di->getShared('session');
     }
 }

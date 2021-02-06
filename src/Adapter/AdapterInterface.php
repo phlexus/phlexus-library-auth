@@ -20,23 +20,19 @@ use Phalcon\Di\DiInterface;
  */
 interface AdapterInterface
 {
+    /**
+     * AdapterInterface constructor interface
+     *
+     * @param DiInterface $di
+     * @param array $configurations
+     */
     public function __construct(DiInterface $di, array $configurations);
 
     /**
      * @param array $credentials
      * @return bool
      */
-    public function login(array $credentials = []): bool;
-
-    /**
-     * @return bool
-     */
-    public function logout(): bool;
-
-    /**
-     * @return bool
-     */
-    public function isLogged(): bool;
+    public function validate(array $credentials): bool;
 
     /**
      * @return mixed

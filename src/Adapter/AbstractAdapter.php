@@ -26,23 +26,23 @@ abstract class AbstractAdapter implements AdapterInterface
     protected $di;
 
     /**
+     * @var mixed|null
+     */
+    protected $identity = null;
+
+    /**
      * @param array $credentials
      * @return bool
      */
-    abstract public function login(array $credentials = []): bool;
+    abstract public function validate(array $credentials): bool;
 
     /**
-     * @return bool
+     * Identity of just logged in user
+     *
+     * @return mixed|null
      */
-    abstract public function logout(): bool;
-
-    /**
-     * @return bool
-     */
-    abstract public function isLogged(): bool;
-
-    /**
-     * @return mixed
-     */
-    abstract public function getIdentity();
+    public function getIdentity()
+    {
+        return $this->identity;
+    }
 }
