@@ -110,8 +110,20 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
             return false;
         }
 
+        $this->user = $row;
+
         $this->identity = $row->$primaryKey;
 
         return true;
+    }
+
+    /**
+     * Result of logged in user
+     *
+     * @return ResultInterface|null
+     */
+    public function getModelUser()
+    {
+        return $this->user;
     }
 }
