@@ -28,7 +28,7 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
     /**
      * Identity conditions string key
      */
-    const IDENTITY_KEY = 'identity';
+    private const IDENTITY_KEY = 'identity';
 
     /**
      * @var string
