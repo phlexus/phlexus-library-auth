@@ -17,7 +17,6 @@ use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Session\Manager as PhalconSession;
-use Phlexus\Libraries\Auth\Adapter\AdapterInterface;
 use Phlexus\Libraries\Auth\Adapter\AdapterInterface as AuthAdapterInterface;
 use Phlexus\Libraries\Auth\Adapter\AuthAdapterException;
 use Phlexus\Libraries\Auth\Adapter\ModelAdapter;
@@ -46,7 +45,7 @@ class Manager extends Injectable implements EventsAwareInterface
     /**
      * @var AdapterInterface
      */
-    protected $adapter;
+    protected AuthAdapterInterface $adapter;
 
     /**
      * @var string|null

@@ -34,14 +34,14 @@ class PlainAdapter extends AbstractAdapter implements AdapterInterface
      *
      * @var string
      */
-    protected $authFilePath;
+    protected string $authFilePath;
 
     /**
      * Associative array of login and passwords
      *
      * @var array
      */
-    private $passwords;
+    private array $passwords;
 
     /**
      * Plain constructor.

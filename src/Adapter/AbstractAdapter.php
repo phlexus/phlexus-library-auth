@@ -23,7 +23,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * @var DiInterface
      */
-    protected $di;
+    protected DiInterface $di;
 
     /**
      * @var mixed|null

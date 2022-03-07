@@ -33,22 +33,22 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
     /**
      * @var string
      */
-    protected $modelClass;
+    protected string $modelClass;
 
     /**
      * @var string
      */
-    protected $identityField;
+    protected string $identityField;
 
     /**
      * @var string
      */
-    protected $passwordField;
+    protected string $passwordField;
 
     /**
      * @var string
      */
-    protected $userIdField;
+    protected string $userIdField;
 
     /**
      * @var ResultInterface|null
