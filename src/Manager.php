@@ -53,6 +53,11 @@ class Manager extends Injectable implements EventsAwareInterface
     private $sessionAuthKey = null;
 
     /**
+     * @var string|null
+     */
+    private $loginRedirect = null;
+
+    /**
      * Manager constructor.
      *
      * @param string $adapterName
@@ -62,6 +67,8 @@ class Manager extends Injectable implements EventsAwareInterface
      */
     public function __construct(string $adapterName, array $configurations = [])
     {
+        $this->setloginRedirect($configurations['login_redirect']);
+
         $this->initAdapter($adapterName, $configurations);
 
         if ($this->getDI()->has('eventsManager')) {
@@ -112,6 +119,22 @@ class Manager extends Injectable implements EventsAwareInterface
         }
 
         return $this->sessionAuthKey;
+    }
+
+    /**
+     * @param string $uri
+     */
+    public function setloginRedirect(string $key): void
+    {
+        $this->loginRedirect = $key;
+    }
+
+    /**
+     * @return string
+     */
+    public function getloginRedirect(): string
+    {
+        return $this->loginRedirect;
     }
 
     /**
