@@ -13,8 +13,8 @@ declare(strict_types=1);
 
 namespace Phlexus\Libraries\Auth\Adapter;
 
+use Phlexus\Models\Model;
 use Phalcon\Di\DiInterface;
-use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\ResultInterface;
 use Phalcon\Security;
 
