@@ -51,6 +51,11 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
     protected string $userIdField;
 
     /**
+     * @var string
+     */
+    protected string $activeField;
+
+    /**
      * @var ResultInterface|null
      */
     protected $user;
@@ -66,10 +71,11 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
     {
         $fields = $configurations['fields'];
 
-        $this->modelClass = $configurations['model'];
+        $this->modelClass    = $configurations['model'];
         $this->identityField = $fields[self::IDENTITY_KEY];
         $this->passwordField = $fields['password'];
-        $this->userIdField = $fields['id'];
+        $this->userIdField   = $fields['id'];
+        $this->activeField   = $fields['active'];
 
         $this->di = $di;
 
@@ -94,9 +100,13 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
 
         $row = $class::findFirst([
             'columns' => [$primaryKey, $this->identityField, $this->passwordField],
-            sprintf('%s = :%s:', $this->identityField, self::IDENTITY_KEY),
+            sprintf('%s = :%s: AND %s = :%s:',
+                $this->identityField, self::IDENTITY_KEY,
+                $this->activeField, $this->activeField
+            ),
             'bind' => [
                 self::IDENTITY_KEY => $credentials[$this->identityField],
+                $this->activeField => $class::ENABLED
             ],
         ]);
 
