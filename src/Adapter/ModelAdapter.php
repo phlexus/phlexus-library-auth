@@ -132,7 +132,7 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
      *
      * @return ResultInterface|null
      */
-    public function getModelUser()
+    public function getModelUser(): ?ResultInterface
     {
         return $this->user;
     }
