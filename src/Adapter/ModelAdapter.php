@@ -16,7 +16,7 @@ namespace Phlexus\Libraries\Auth\Adapter;
 use Phlexus\Models\Model;
 use Phalcon\Di\DiInterface;
 use Phalcon\Mvc\Model\ResultInterface;
-use Phalcon\Security;
+use Phalcon\Encryption\Security;
 
 /**
  * Auth Model Adapter
