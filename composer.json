@@ -1,14 +1,14 @@
 {
-    "name": "phlexus/phlexus-library-auth",
+    "name": "falcon758/phlexus-library-auth",
     "description": "Phlexus Auth Library",
     "license": "BSD-3-Clause",
     "require": {
-        "php": ">=7.2",
-        "ext-phalcon": "^4.0"
+        "php": ">=7.4",
+        "ext-phalcon": "^5.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8",
-        "phalcon/ide-stubs": "^4.0"
+        "phalcon/ide-stubs": "^5.0"
     },
     "autoload": {
         "psr-4": {

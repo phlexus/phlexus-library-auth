@@ -17,7 +17,6 @@ use Phalcon\Di\Injectable;
 use Phalcon\Events\EventsAwareInterface;
 use Phalcon\Events\ManagerInterface as EventsManagerInterface;
 use Phalcon\Session\Manager as PhalconSession;
-use Phlexus\Libraries\Auth\Adapter\AdapterInterface;
 use Phlexus\Libraries\Auth\Adapter\AdapterInterface as AuthAdapterInterface;
 use Phlexus\Libraries\Auth\Adapter\AuthAdapterException;
 use Phlexus\Libraries\Auth\Adapter\ModelAdapter;
@@ -46,12 +45,17 @@ class Manager extends Injectable implements EventsAwareInterface
     /**
      * @var AdapterInterface
      */
-    protected $adapter;
+    protected AuthAdapterInterface $adapter;
 
     /**
      * @var string|null
      */
     private $sessionAuthKey = null;
+
+    /**
+     * @var string|null
+     */
+    private $loginRedirect = null;
 
     /**
      * Manager constructor.
@@ -63,6 +67,8 @@ class Manager extends Injectable implements EventsAwareInterface
      */
     public function __construct(string $adapterName, array $configurations = [])
     {
+        $this->setloginRedirect($configurations['login_redirect']);
+
         $this->initAdapter($adapterName, $configurations);
 
         if ($this->getDI()->has('eventsManager')) {
@@ -113,6 +119,22 @@ class Manager extends Injectable implements EventsAwareInterface
         }
 
         return $this->sessionAuthKey;
+    }
+
+    /**
+     * @param string $uri
+     */
+    public function setloginRedirect(string $key): void
+    {
+        $this->loginRedirect = $key;
+    }
+
+    /**
+     * @return string
+     */
+    public function getloginRedirect(): string
+    {
+        return $this->loginRedirect;
     }
 
     /**

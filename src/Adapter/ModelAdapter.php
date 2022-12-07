@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 namespace Phlexus\Libraries\Auth\Adapter;
 
+use Phlexus\Models\Model;
 use Phalcon\Di\DiInterface;
-use Phalcon\Mvc\Model;
 use Phalcon\Mvc\Model\ResultInterface;
-use Phalcon\Security;
+use Phalcon\Encryption\Security;
 
 /**
  * Auth Model Adapter
@@ -28,27 +28,32 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
     /**
      * Identity conditions string key
      */
-    const IDENTITY_KEY = 'identity';
+    private const IDENTITY_KEY = 'identity';
 
     /**
      * @var string
      */
-    protected $modelClass;
+    protected string $modelClass;
 
     /**
      * @var string
      */
-    protected $identityField;
+    protected string $identityField;
 
     /**
      * @var string
      */
-    protected $passwordField;
+    protected string $passwordField;
 
     /**
      * @var string
      */
-    protected $userIdField;
+    protected string $userIdField;
+
+    /**
+     * @var string
+     */
+    protected string $activeField;
 
     /**
      * @var ResultInterface|null
@@ -66,10 +71,11 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
     {
         $fields = $configurations['fields'];
 
-        $this->modelClass = $configurations['model'];
+        $this->modelClass    = $configurations['model'];
         $this->identityField = $fields[self::IDENTITY_KEY];
         $this->passwordField = $fields['password'];
-        $this->userIdField = $fields['id'];
+        $this->userIdField   = $fields['id'];
+        $this->activeField   = $fields['active'];
 
         $this->di = $di;
 
@@ -94,9 +100,13 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
 
         $row = $class::findFirst([
             'columns' => [$primaryKey, $this->identityField, $this->passwordField],
-            sprintf('%s = :%s:', $this->identityField, self::IDENTITY_KEY),
+            sprintf('%s = :%s: AND %s = :%s:',
+                $this->identityField, self::IDENTITY_KEY,
+                $this->activeField, $this->activeField
+            ),
             'bind' => [
                 self::IDENTITY_KEY => $credentials[$this->identityField],
+                $this->activeField => $class::ENABLED
             ],
         ]);
 
@@ -110,8 +120,20 @@ class ModelAdapter extends AbstractAdapter implements AdapterInterface
             return false;
         }
 
+        $this->user = $row;
+
         $this->identity = $row->$primaryKey;
 
         return true;
+    }
+
+    /**
+     * Result of logged in user
+     *
+     * @return ResultInterface|null
+     */
+    public function getModelUser(): ?ResultInterface
+    {
+        return $this->user;
     }
 }
